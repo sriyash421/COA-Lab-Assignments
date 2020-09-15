@@ -22,19 +22,24 @@
 module bit_serial_adder (
     clk,
     reset,
-    a,
-    b,
+    I1,
+    I2,
     cin,
-    s,
+    O,
     cout
 );
-    input clk, reset, a, b, cin;
+    input clk, reset, cin;
+    input reg[7:0] I1;
+    input reg[7:0] I2;
+    input reg a,b;
+    output reg[7:0] O;
     output reg s, cout;
-    reg f, c;
+    reg f, c, counter;
     always @(posedge clk or posedge reset) begin
         if(reset) begin
             s = 0;
             f = 0;
+            counter = 0;
         end
         else begin
             if(f) begin
@@ -42,10 +47,14 @@ module bit_serial_adder (
                 f = 1;
             end
             else begin
-                c = cout
+                c = cout;
             end
+            a = I1[counter];
+            b = I2[counter];
             s = a ^ b ^ c;
-            cout = (a&b) | (c&(a^b))
+            cout = (a&b) | (c&(a^b));
+            O[counter] = s;
+            counter = counter + 1;
         end
     end
 endmodule
