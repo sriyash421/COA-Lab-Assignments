@@ -18,9 +18,17 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+// Assignment - 2
+// Problem  - 1
+// Semester Aut - 2020 
+// Group - 53
+// Name_1 : Hardik Aggarwal 
+// Roll_1 : 18CS10021
+// Name_2 : Sriyash Poddar
+// Roll_2 : 18CS30040
 
 
-module ripple_carry_adder_tb;
+module ripple_carry_adder_tb;     // test bench implementation 
 reg [7:0] a;
 
 reg [7:0] b;
@@ -31,9 +39,9 @@ wire [7:0] sum;
 
 wire cout;
 
-ripple_carry_adder rca(a,b,cin,sum,cout);
+ripple_carry_adder rca(a,b,cin,sum,cout);      // initializing the module instance 
 
-initial begin
+initial begin          // various inputs 
 
 #10 a=8'b00000001;b=8'b00000001;cin=1'b0;
 
@@ -53,6 +61,6 @@ initial begin
 
 #10 a=8'b11111111;b=8'b11111111;cin=1'b0;
 
- #10 $stop;
+ #10 $stop;                                        // finish after 10 time steps 
 end
 endmodule

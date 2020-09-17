@@ -19,8 +19,18 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+// Assignment - 2
+// Problem  - 2
+// Semester Aut - 2020 
+// Group - 53
+// Name_1 : Hardik Aggarwal 
+// Roll_1 : 18CS10021
+// Name_2 : Sriyash Poddar
+// Roll_2 : 18CS30040
 
-module hybrid_adder_tb;
+
+
+module hybrid_adder_tb;     // test bench implementation 
     reg [7:0] a;
     
     reg [7:0] b;
@@ -30,9 +40,9 @@ module hybrid_adder_tb;
     wire [7:0] sum;
     
     wire cout;
-    hybrid_adder ha(a,b,cin,sum,cout);
+    hybrid_adder ha(a,b,cin,sum,cout);        // initializing the module instance 
     
-    initial begin
+    initial begin      // various inputs 
     
     #10 a=8'b00000001;b=8'b00000001;cin=1'b0;
     
@@ -52,6 +62,6 @@ module hybrid_adder_tb;
     
     #10 a=8'b11111111;b=8'b11111111;cin=1'b0;
     
-     #10 $stop;
+     #10 $stop;           // finish after 10 time steps 
     end
 endmodule
