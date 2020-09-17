@@ -29,32 +29,26 @@
 // Roll_2 : 18CS30040
 
 module bit_serial_adder ( //8 bit serial adder
-    clk,
-    reset,
-    a,
-    b,
-    cin,
-    s,
-    cout
+    input clk,reset,
+    input [7:0]I0,
+    input [7:0]I1,
+    output reg cin,
+    output reg [7:0]sum,
+    output reg cout
 );
-    input clk, reset, a, b, cin;
-    output reg s, cout;
-    reg f, c;
-    always @(posedge clk or posedge reset) begin
-        if(reset) begin
-            s = 0; // resetting the values
-            f = 0;
-        end
-        else begin
-            if(f) begin
-                c = cin; // when adding bits for the first time
-                f = 1;
-            end
-            else begin
-                c = cout; // propagating the carry value
-            end
-            s = a ^ b ^ c; //required calculations
-            cout = (a&b) | (c&(a^b));
+    reg [3:0]count;
+    always @(posedge reset) begin
+        sum=8'b00000000; // reset the values
+        cin=0;
+        count=4'b0000;
+    end
+    
+    always @(posedge clk) begin
+        if(count < 4'b1000) begin
+            sum[count] = I0[count] ^ I1[count] ^ cin; // SUM
+            cout = (I0[count] & I1[count]) | (cin & (I0[count] ^ I1[count])); //CARRY
+            cin = cout; // PROPAGATING CARRY
+            count = count+1; //INCREASING COUNTER 
         end
     end
 endmodule

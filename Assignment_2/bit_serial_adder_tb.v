@@ -27,36 +27,54 @@
 // Roll_1 : 18CS10021
 // Name_2 : Sriyash Poddar
 // Roll_2 : 18CS30040
+`include "bit_serial_adder.v"
 
-module bit_serial_adder_tb; // test bench implementation 
-    reg [7:0] I1;
-    reg [7:0] I2;
-    reg [7:0] O;
-    reg clk,reset,a,b,cin;
-    wire s,cout;
-    
-    bit_serial_adder inst_1 (.clk(clk),.reset(reset),.s(s),.cout(cout),.a(a),.b(b)); // initializing the module instance 
+module testBench_bit_serial_adder;  // test bench implementation 
+    //INPUTS
+    reg clk;
+    reg reset;
+    reg [7:0]I0;
+    reg [7:0]I1;
+    wire cin;
 
-    initial begin
-        clk = 0;
-        #1 ;
-        clk = ~ clk;
-        reset = 0;
-        forever #1 clk = ~ clk;
-    end
+    // OUTPUTS
+    wire [7:0] sum;
+    wire cout;
 
-    initial begin
-        I1 = 2'b00110001; // various inputs 
-        I2 = 2'b00010100;
-        reset = 1; a=0; b=0; // adding 49 + 20
-        #2;        a = I1[0]; b = I2[0]; cin = 1;
-        #2;O[0]=s; a = I1[1]; b = I2[1]; cin = 0;
-        #2;O[1]=s; a = I1[2]; b = I2[2]; cin = 0;
-        #2;O[2]=s; a = I1[3]; b = I2[3]; cin = 0;
-        #2;O[3]=s; a = I1[4]; b = I2[4]; cin = 0;
-        #2;O[4]=s; a = I1[5]; b = I2[5]; cin = 0;
-        #2;O[5]=s; a = I1[6]; b = I2[6]; cin = 0;
-        #2;O[6]=s; a = I1[7]; b = I2[7]; cin = 0;
-        #2;O[7]=s;
+    // initializing the module instance
+    bit_serial_adder uut (
+        .clk(clk), 
+        .reset(reset), 
+        .I0(I0), 
+        .I1(I1), 
+        .cin(cin), 
+        .sum(sum), 
+        .cout(cout)
+    );
+
+    //generate clock with 10 ns clock period.
+    always
+        #5 clk = ~clk;
+        
+    initial begin  // various inputs 
+        clk = 1;
+
+        I0=8'b00000001;I1=8'b00000001;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b00000010;I1=8'b00000011;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b10000001;I1=8'b10000001;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b00011001;I1=8'b00110001;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b00000011;I1=8'b00000011;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b11111111;I1=8'b00000001;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b11111111;I1=8'b00000000;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        I0=8'b11111111;I1=8'b11111111;reset=1'b1;#10;reset=1'b0;#80;
+        $display("sum=%d",sum);
+        #10; $stop;
     end
 endmodule
