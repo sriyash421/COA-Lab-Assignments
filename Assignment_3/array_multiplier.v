@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Assignment - 3
 // Problem  - 1
 // Semester Aut - 2020 
@@ -7,27 +8,27 @@
 // Name_2 : Sriyash Poddar
 // Roll_2 : 18CS30040
 
-module unsigned_array_mult ( // 5x5 bit array multiplier
-    input clk,reset,
+module partial_product (
     input [5:0]a,
     input [5:0]b,
-    output reg [11:0]product
+    input [4:0]i,
+    output[11:0]product
 );
-    reg [4:0]counter;
-    reg [5:0]sum;
-    reg [11:0]partial_product;
-    reg [5:0]b_j;
-    always @(posedge reset) begin //reset all values
-        counter = 4'b0000;
-        product = 11'b00000000000;
-    end
-    always @(posedge clk) begin
-        if(counter<4'b0101) begin
-            b_j = {5{b[counter]}};
-            sum = a&b_j; //TAKING AND OF M AND Q_J
-            partial_product = sum << counter; //PARTIAL PRODUCT
-            product = product + partial_product;// ADD TO FINAL PRODUCT
-            counter = counter + 1; 
+    assign product = (a&{5{b[i]}}) << i;
+endmodule
+
+module unsigned_array_mult ( // 5x5 bit array multiplier
+    input [5:0]a,
+    input [5:0]b,
+    output [11:0]product
+);
+    wire [11:0]partial_product[5:0];
+    genvar i;
+    generate
+        for (i=0;i<=5;i= i+1) begin
+            partial_product inst (.product(partial_product[i]),.a(a),.b(b),.i(i)); //generating partial products for each bit
         end
-    end
+    endgenerate
+    // taking the final sum
+    assign product = partial_product[0]+partial_product[1]+partial_product[2]+partial_product[3]+partial_product[4]+partial_product[5];
 endmodule
