@@ -16,6 +16,7 @@ module unsigned_array_mult_tb;
     // OUTPUTS
     wire [11:0] product;
     // initializing the module instance
+    // unit under test = unsigned_array_mult
     unsigned_array_mult uut (
         .a(a), 
         .b(b), 
