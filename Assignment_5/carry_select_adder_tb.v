@@ -16,9 +16,10 @@ module carry_select_adder_tb;
     reg cin;
     //Output
     wire [16:0]out;
-
+    //uut - unit under testing
     carry_select_adder uut (I0,I1,cin,out);
 
+    //initialize inputs
     initial begin
         I0 = 0; I1 = 0; cin = 0;
         $monitor("I0=%d I1=%d sum=%d",I0,I1,out);
