@@ -38,8 +38,7 @@ module carry_select_adder (
     input [15:0]I0,
     input [15:0]I1,
     input cin,
-    output [15:0]out,
-    output cout
+    output [16:0]out
 );
     wire [15:0]temp1;
     wire [15:0]temp2;
@@ -69,5 +68,5 @@ module carry_select_adder (
         end
     endgenerate
 
-    MUX mux_inst_ (cin1[16],cin2[16],cin,cout);
+    MUX mux_inst_ (cin1[16],cin2[16],cin,out[16]);
 endmodule

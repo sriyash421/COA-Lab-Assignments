@@ -10,19 +10,18 @@
 `include "carry_select_adder.v"
 
 module carry_select_adder_tb;
-
+    //Inputs
     reg [15:0]I0;
     reg [15:0]I1;
     reg cin;
+    //Output
+    wire [16:0]out;
 
-    wire [15:0]out;
-    wire cout;
-
-    carry_select_adder uut (I0,I1,cin,out,cout);
+    carry_select_adder uut (I0,I1,cin,out);
 
     initial begin
         I0 = 0; I1 = 0; cin = 0;
-        $monitor("I0=%d I1=%d sum=%d cout=%d",I0,I1,out,cout);
+        $monitor("I0=%d I1=%d sum=%d",I0,I1,out);
 
         #50; I0 = 16'b1110110000011100; I1 = 16'b1111111101000110;
 
