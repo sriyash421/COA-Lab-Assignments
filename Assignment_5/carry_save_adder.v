@@ -16,17 +16,52 @@ module full_adder ( //Full adder to generate C and S
     assign carry = (a & b) | (cin & b) | (a & cin);
 endmodule
 
-module csa_block( // CSA block to generate C and S at each node
-    input [22:0]a,
-    input [22:0]b,
-    input [22:0]c,
-    output [22:0]sum,
-    output [22:0]cout
+module cla_adder (
+    input [19:0]a,
+    input [19:0]b,
+    output [19:0]sum
 );
-    wire [22:0]temp_cout;
+    wire c1,c2,c3,c4,c5;
+
+    cla_adder_4bit cla1 (a[3:0],   b[3:0],   1'b0, sum[3:0],   c1);
+    cla_adder_4bit cla2 (a[7:4],   b[7:4],   c1,   sum[7:4],   c2);
+    cla_adder_4bit cla3 (a[11:8],  b[11:8],  c2,   sum[11:8],  c3);
+    cla_adder_4bit cla4 (a[15:12], b[15:12], c3,   sum[15:12], c4);
+    cla_adder_4bit cla5 (a[19:16], b[19:16], c4,   sum[19:16], c5);
+    
+endmodule
+
+module cla_adder_4bit (
+    input [3:0] a,b,
+    input cin,
+    output [3:0] sum,
+    output cout
+);
+    wire [3:0] p,g,c;
+ 
+    assign p=a^b;//propagate
+    assign g=a&b; //generate
+    
+    assign c[0]=cin;
+    assign c[1]= g[0]|(p[0]&c[0]);
+    assign c[2]= g[1] | (p[1]&g[0]) | p[1]&p[0]&c[0];
+    assign c[3]= g[2] | (p[2]&g[1]) | p[2]&p[1]&g[0] | p[2]&p[1]&p[0]&c[0];
+    assign cout= g[3] | (p[3]&g[2]) | p[3]&p[2]&g[1] | p[3]&p[2]&p[1]&p[0]&c[0];
+    assign sum=p^c;
+
+endmodule
+
+module csa_block( // CSA block to generate C and S at each node
+    input [19:0]a,
+    input [19:0]b,
+    input [19:0]c,
+    output [19:0]sum,
+    output [19:0]cout
+);
+    wire [19:0]temp_cout;
     genvar i;
     generate
-        for (i=0;i<=22;i= i+1) begin
+        for (i=0;i<=19;i= i+1) begin
             full_adder inst (.a(a[i]),.b(b[i]),.cin(c[i]),.sum(sum[i]),.carry(temp_cout[i]));
         end
     endgenerate
@@ -34,19 +69,19 @@ module csa_block( // CSA block to generate C and S at each node
 endmodule
 
 module carry_save_adder ( //module to add 9 numbers
-    input [22:0]I0,
-    input [22:0]I1,
-    input [22:0]I2,
-    input [22:0]I3,
-    input [22:0]I4,
-    input [22:0]I5,
-    input [22:0]I6,
-    input [22:0]I7,
-    input [22:0]I8,
-    output [22:0]out
+    input [19:0]I0,
+    input [19:0]I1,
+    input [19:0]I2,
+    input [19:0]I3,
+    input [19:0]I4,
+    input [19:0]I5,
+    input [19:0]I6,
+    input [19:0]I7,
+    input [19:0]I8,
+    output [19:0]out
 );
-    wire [22:0] cout[6:0];
-    wire [22:0] sum[6:0];
+    wire [19:0] cout[6:0];
+    wire [19:0] sum[6:0];
     // Building the tree
     csa_block inst_0 (I2,I1,I0,sum[0],cout[0]);
 
@@ -63,6 +98,6 @@ module carry_save_adder ( //module to add 9 numbers
     csa_block inst_6 (sum[3],sum[5],cout[5],sum[6],cout[6]);
 
     //Final sum
-    assign out = sum[6] + cout[6];
+    cla_adder final_adder (sum[6], cout[6], out);
 endmodule
 
