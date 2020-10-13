@@ -19,6 +19,16 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+// Assignment - 5
+// Problem  - 1
+// Semester Aut - 2020 
+// Group - 53
+// Name_1 : Hardik Aggarwal 
+// Roll_1 : 18CS10021
+// Name_2 : Sriyash Poddar
+// Roll_2 : 18CS30040
+
+
  module CLA_Adder(a, b, cin, sum, cout);  // 4 bit carry look ahead adder
     input[3:0] a,b;
     input cin;
@@ -58,11 +68,11 @@ endmodule
 
 module ALU_4bit( A, B, M, S, F , cin , cout);
 input M, cin;
-input [3:0] A, B, S;
+input [3:0] A,B, S;
 output [3:0] F;
 output cout;
 reg [3:0] X, Y;
-wire cla_cout = 0;
+wire cla_cout;
 wire [3:0]logic, arith;                          // calling 4 instances of logic unit for each bit 
 logic_module l0(S, A[0], B[0], logic[0]);
 logic_module l1(S, A[1], B[1], logic[1]);
@@ -70,8 +80,8 @@ logic_module l2(S, A[2], B[2], logic[2]);
 logic_module l3(S, A[3], B[3], logic[3]);
 
 
-always @(A, B)              // setting inputs to the adder based on values of Select input
-
+always @(*)              // setting inputs to the adder based on values of Select input
+begin
 case(S)
     0:begin
         X = A;               // F = A
@@ -86,8 +96,8 @@ case(S)
         Y = 0;
     end
     3:begin
-        X = 0;                  // F = -1
-        Y = 1111;
+        X = 0;                  // F = -1            
+        Y = 4'b1111;
     end
     4:begin
         X = A;                 // F = A + (A&B')
@@ -98,12 +108,12 @@ case(S)
         Y = A&(~B);
     end
     6:begin
-        X = A - 1;              // F = A - B  - 1
-        Y = -B;
+        X = A;              // F = A - B  - 1
+        Y = ~B;
     end
     7:begin                     // F = A&B - 1
          X = A&B;
-         Y = -1;          
+         Y = 4'b1111;          
     end
     8:begin                     
           X = A;                 // F =  A + A&B
@@ -119,7 +129,7 @@ case(S)
     end
     11:begin
           X = A&B;                // F = A&B - 1
-          Y = -1;
+          Y = 4'b1111;
     end
     12:begin
           X = A;                 // F =  A  + A
@@ -135,16 +145,16 @@ case(S)
     end
     15:begin                     // F =  A - 1
           X = A;
-          Y = -1;         
+          Y = 4'b1111;         
     end
     default begin                   // defaults to 0
           X = 0;
           Y = 0;
     end
 endcase
-
-wire cla_cin = ~cin;                     // set cin to cla
+end
+wire cla_cin = !cin;                     // set cin to cla
 CLA_Adder cl1(X, Y,cla_cin,arith,cla_cout);   // call the cla adder
-assign cout = ~cla_cout;         // set the cout as negation of cout from cla 
+assign cout = !cla_cout;         // set the cout as negation of cout from cla 
 assign F = M?logic:arith;       // 2x1 mux to select logic or arithmatic operations 
 endmodule

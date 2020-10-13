@@ -18,6 +18,14 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+// Assignment - 5
+// Problem  - 2
+// Semester Aut - 2020 
+// Group - 53
+// Name_1 : Hardik Aggarwal 
+// Roll_1 : 18CS10021
+// Name_2 : Sriyash Poddar
+// Roll_2 : 18CS30040
 
 
 module ALU_16bit_tb;
@@ -29,9 +37,7 @@ module ALU_16bit_tb;
     ALU_16bit a1(A,B,M,S,F,cin,cout);        // initializing the module instance 
     initial begin      // various inputs     // the outputs are represented in 2 complement's form 
     $monitor ("time = ", $time , " A = %d, B = %d, M = %d, S  = %d, F = %d, cin = %d, cout = %d", A, B, M, S, F, cin , cout);  // show output when any of the following changes
-    M = 1;
-    cin = 0;
-    S = 9;
+    
     #10 A = 3; B = 1;
     M = 1;
     cin = 0;
@@ -49,8 +55,8 @@ module ALU_16bit_tb;
     cin = 0;
     S = 7;
     #10 A = 141; B = 118;
-    M = 0;
-    cin = 0;
+    M = 0;  
+    cin = 1;
     S = 3;
     #10 A = 51; B = 159;
     M = 1;
@@ -69,6 +75,9 @@ module ALU_16bit_tb;
     cin = 0;
     S = 4;
     #10 A = 48555; B = 36018;
+    M = 1;
+    cin = 0;
+    S = 9;
      #10 $stop;           // finish after 10 time steps 
      $finish;
     end 
