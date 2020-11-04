@@ -52,6 +52,8 @@ EXIT_CODE:           .word 10
         j N2
         # n1 = n1-n2
     N1: sub $t0, $t0, $t1
+        # loop continues
+        j loop
         # n3 = n2-n1
     N2: sub $t1, $t1, $t0
         # loop continues

@@ -53,13 +53,15 @@ EXIT_CODE:           .word 10
         # li $t4, ($t1)
 
         loop:
-            beq $t3, $s4, end_loop
+            beq $t3, $t4, end_loop
             # if(n1 > n2)
             bgt $t3, $t4, N1
             # else
             j N2
             # n1 = n1-n2
         N1: sub $t3, $t3, $t4
+            # loop continues
+            j loop
             # n3 = n2-n1
         N2: sub $t4, $t4, $t3
             # loop continues
@@ -93,5 +95,8 @@ EXIT_CODE:           .word 10
 
     exit_:
         # Exit
+        la $a0, newline
+        lw $v0, PRINT_STRING_CODE
+        syscall
         lw $v0, EXIT_CODE
         syscall
