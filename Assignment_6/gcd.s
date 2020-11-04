@@ -45,7 +45,7 @@ EXIT_CODE:           .word 10
 
         # while(n1 != n2)
     loop:
-        beq $t1, $s2, end_loop
+        beq $t1, $t0, end_loop
         # if(n1 > n2)
         bgt $t0, $t1, N1
         # else
