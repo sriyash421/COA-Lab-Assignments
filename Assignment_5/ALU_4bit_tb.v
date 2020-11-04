@@ -18,6 +18,14 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+// Assignment - 5
+// Problem  - 1
+// Semester Aut - 2020 
+// Group - 53
+// Name_1 : Hardik Aggarwal 
+// Roll_1 : 18CS10021
+// Name_2 : Sriyash Poddar
+// Roll_2 : 18CS30040
 
 
 module ALU_4bit_tb;
@@ -30,8 +38,8 @@ module ALU_4bit_tb;
     ALU_4bit a1(A,B,M,S,F,cin,cout);        // initializing the module instance 
     initial begin      // various inputs 
     M = 1'b0;
-    S = 4'b0010;
-    cin = 1;
+    S = 4'b0001;
+    cin = 0;
     $monitor ("time = ", $time , " A = %d, B = %d, M = %d, S  = %d, F = %d, cin = %d, cout = %d", A, B, M, S, F, cin , cout);  // show output when any of the following changes
     #10 A=4'b0001;B=4'b0001;
   

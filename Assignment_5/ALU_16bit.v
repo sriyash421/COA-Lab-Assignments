@@ -18,6 +18,14 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+// Assignment - 5
+// Problem  - 2
+// Semester Aut - 2020 
+// Group - 53
+// Name_1 : Hardik Aggarwal 
+// Roll_1 : 18CS10021
+// Name_2 : Sriyash Poddar
+// Roll_2 : 18CS30040
 
 
 module ALU_16bit( A, B, M, S, F , cin , cout);
@@ -27,7 +35,6 @@ input [15:0] A, B;
 input [3:0]S;
 output [15:0] F;
 output cout;
-
 wire [2:0]carry;    // to store the ripple carries generated.
 ALU_4bit b0(A[3:0], B[3:0] , M, S, F[3:0], cin ,carry[0]);    // 4 different instances of the 4 bit ALU unit 
 ALU_4bit b1(A[7:4], B[7:4] , M, S, F[7:4], carry[0] ,carry[1]);

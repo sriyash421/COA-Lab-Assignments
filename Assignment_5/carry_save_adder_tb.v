@@ -7,13 +7,12 @@
 // Roll_1 : 18CS10021
 // Name_2 : Sriyash Poddar
 // Roll_2 : 18CS30040
-`include "carry_save_adder.v"
 
 module carry_save_adder_tb;
     //Inputs
-    reg [15:0] I[8:0];
+    reg [19:0] I[8:0];
     //Output
-    wire [22:0]out;
+    wire [19:0]out;
     
     //uut - unit under testing
     carry_save_adder uut (I[0], I[1], I[2], I[3], I[4], I[5], I[6], I[7], I[8], out);
