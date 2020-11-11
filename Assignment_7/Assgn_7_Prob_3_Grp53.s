@@ -10,7 +10,7 @@
 
 ####################### Data segment ######################################
 .data
-input_msg: .asciiz "Input number of elements in the array:- 0<N<1000\n"
+# input_msg: .asciiz "Input number of elements in the array:- 0<N<1000\n"
 array_msg: .asciiz "Input elements of the array:- \n"
 search_msg: .asciiz "Input search element:- \n"
 result_t:    .asciiz "\nThe search element is present\n"
@@ -29,13 +29,16 @@ EXIT_CODE:           .word 10
 .text
 .globl main
     main:
-        la $a0, input_msg
-        lw $v0, PRINT_STRING_CODE
-        syscall
+        # la $a0, input_msg
+        # lw $v0, PRINT_STRING_CODE
+        # syscall
 
-        lw $v0, READ_INT_CODE
-        syscall
-        move $t0, $v0
+        # lw $v0, READ_INT_CODE
+        # syscall
+        # move $t0, $v0
+        
+        # Loading fixed size
+        li $t0, 9
 
         la $a0, array_msg
         lw $v0, PRINT_STRING_CODE

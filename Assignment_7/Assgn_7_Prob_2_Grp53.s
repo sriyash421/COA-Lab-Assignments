@@ -29,13 +29,16 @@ EXIT_CODE:           .word 10
 
     main:
         # Reading size of array
-        la $a0, input_msg
-        lw $v0, PRINT_STRING_CODE
-        syscall
+        # la $a0, input_msg
+        # lw $v0, PRINT_STRING_CODE
+        # syscall
 
-        lw $v0, READ_INT_CODE
-        syscall
-        move $t0, $v0
+        # lw $v0, READ_INT_CODE
+        # syscall
+        # move $t0, $v0
+
+        # Loading fixed size
+        li $t0, 8
 
         # Reading all elements of the array
         la $a0, array_msg
