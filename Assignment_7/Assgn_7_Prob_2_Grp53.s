@@ -28,16 +28,7 @@ EXIT_CODE:           .word 10
 .globl main
 
     main:
-        # Reading size of array
-        # la $a0, input_msg
-        # lw $v0, PRINT_STRING_CODE
-        # syscall
-
-        # lw $v0, READ_INT_CODE
-        # syscall
-        # move $t0, $v0
-
-        # Loading fixed size
+    
         li $t0, 8
 
         # Reading all elements of the array
@@ -62,7 +53,20 @@ EXIT_CODE:           .word 10
         
         end_in_loop:
 
-        la $t1, array
+
+la $t1, array
+# setting the parameters 
+move $a0, $t0
+move $a1, $t1
+
+jal InsertionSort    # procedural call to Insertion Sort 
+
+
+InsertionSort:
+
+
+        move $t0  $a0
+        move $t1, $a1
         # i=1
         li $t2, 1
 
