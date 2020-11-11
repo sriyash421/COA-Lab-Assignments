@@ -10,10 +10,10 @@
 
 ####################### Data segment ######################################
 .data
-# input_msg: .asciiz "Input number of elements in the array:- 0<N<1000\n"
+
 array_msg: .asciiz "Input elements of the array:- \n"
 search_msg: .asciiz "Input search element:- \n"
-result_t:    .asciiz "\nThe search element is present\n"
+result_t:    .asciiz "\nThe search element is present at index (0 based indexing ) : "
 result_f:    .asciiz "\nThe search element is not present\n"
 newline:   .asciiz "\n"
 space:     .asciiz " "
@@ -29,13 +29,7 @@ EXIT_CODE:           .word 10
 .text
 .globl main
     main:
-        # la $a0, input_msg
-        # lw $v0, PRINT_STRING_CODE
-        # syscall
-
-        # lw $v0, READ_INT_CODE
-        # syscall
-        # move $t0, $v0
+       
         
         # Loading fixed size
         li $t0, 9
@@ -104,57 +98,106 @@ EXIT_CODE:           .word 10
 
         lw $v0, READ_INT_CODE
         syscall
+        move $a2, $v0
+        
+        # initialising search boundaries, l = 0 and r = n -1
+        add $a0, $zero, $zero
+        addi $a1, $t0, -1
+        jal BinarySearch
         move $t1, $v0
-        
-        # initialising search boundaries, l=0 and r=n-1
-        la $t2, array
-        add $t3, $zero, $zero
-        addi $t0, $t0, -1
-        
-        search_loop:
-            # l > r, search failed
-            bgt $t3, $t0, not_found
-            add $t4, $t3, $t0
-            sra $t4, $t4, 1 # dividing by 2, using right shift
-            mul $t5, $t4, 4
-            # address of mid element
-            add $t5, $t2, $t5
-            
-            # loading arr[(l+r)/2]
-            lw $t6, 0($t5)
-            # search element found
-            beq $t1, $t6, found
+        bge $t1, $zero, present
 
-            # if x < arr[mid], search in left half
-            blt $t1, $t6, less_than
-            # if x > arr[mid], search in right half
-            j greater_than
 
-            less_than:
-                # updating r = mid-1 for search in left half
-                add $t0, $t4, -1
-                j search_loop
-            greater_than:
-                # updating l = mid+1 for search in right half
-                addi $t4, $t4, 1
-                add $t3, $zero, $t4
-                j search_loop
 
-        not_found:
+not_present:
             # output for unsuccessful search
-            la $a0, result_f
-            lw $v0, PRINT_STRING_CODE
-            syscall
-            j exit_
+    la $a0, result_f
+    lw $v0, PRINT_STRING_CODE
+    syscall
+    j exit_
         
-        found:
-            # output for successful search
-            la $a0, result_t
-            lw $v0, PRINT_STRING_CODE
-            syscall
-            j exit_
+present:
+    # output for successful search
+    la $a0, result_t
+    lw $v0, PRINT_STRING_CODE
+    syscall
 
-        exit_:
-            # exit
-            lw $v0, EXIT_CODE
-            syscall
+    move $a0, $t1
+    lw $v0, PRINT_INT_CODE
+    syscall
+
+    j exit_
+
+
+
+
+exit_:
+    # exit
+    lw $v0, EXIT_CODE
+    syscall
+
+
+
+
+BinarySearch:
+
+    # base condition if l == r compare and return 
+    bne $a0 , $a1 , recurse 
+
+    la $t1, array
+    move $t2 , $a0
+    mul $t2, $t2, 4
+    add $t1, $t1 , $t2
+    lw $t3, 0($t1)
+    beq $t3, $a2, found               # if equal return index else return -1
+    addi $v0, $zero, -1
+    jr $ra    
+
+    found:  # return the index 
+    move $v0, $a0
+    jr $ra
+    
+
+    recurse:
+            addi $sp, $sp, -16
+	      	sw $ra, ($sp) # Storing ra
+	      	sw $a0, 4($sp) # Storing the three arguments
+	      	sw $a1, 8($sp)
+            sw $a2, 12($sp)
+
+
+            la $t1, array      # load the array 
+            move $t2 , $a0
+            move $t4, $a1
+
+            add $t2, $t2, $t4            # calculate mid = (l + r) >> 1
+            sra $t2, $t2, 1
+            mul $t5, $t2, 4                  # get the address of a[mid]
+
+
+            add $t1, $t1 , $t5    
+            lw $t3, 0($t1)
+            ble $a2, $t3, less_than       # compare the value with  a[mid]
+
+            j greater_than
+        
+
+            less_than:                 # if value <= a[mid] recurse in left  half
+                move $a1, $t2
+                jal BinarySearch
+                j restore
+
+            greater_than:             # if value is > a[mid] recurse in right half 
+
+                addi $t2, $t2, 1
+                move $a0, $t2
+                jal BinarySearch
+                j restore
+
+            restore:            # restore the stack pointer 
+
+                lw $ra, ($sp)
+	          	addi $sp, $sp, 16
+	          	jr $ra
+
+        
